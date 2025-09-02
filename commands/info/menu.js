@@ -1,4 +1,3 @@
-// commands/info/menu.js
 const fs = require("fs");
 const path = require("path");
 const os = require("os");
@@ -43,17 +42,18 @@ module.exports = {
       hour: "2-digit",
       minute: "2-digit",
     });
-    const totalRam = (os.totalmem() / 1024 / 1024).toFixed(0);
-    const usedRam = ((os.totalmem() - os.freemem()) / 1024 / 1024).toFixed(0);
+
+    const totalRamGiB = (os.totalmem() / 1024 ** 3).toFixed(1);
+    const usedRamGiB = ((os.totalmem() - os.freemem()) / 1024 ** 3).toFixed(1);
     const version = "1.0.0";
 
     const lines = [
-      " ".repeat(4000),
+      "‎".repeat(500),
       " PRIMEAL-APE COMMANDS",
       "╭─⧉ SYSTEM INFO",
       `│   Date: ${date}`,
       `│   Time: ${time}`,
-      `│   RAM: ${usedRam}MB / ${totalRam}MB`,
+      `│   RAM: ${usedRamGiB}GiB / ${totalRamGiB}GiB`,
       `│   Version: ${version}`,
       "│",
       "╰─⧉ COMMANDS ↓↓↓",
