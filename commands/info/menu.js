@@ -6,30 +6,40 @@ module.exports = {
   name: "menu",
   category: "info",
   run: async (ctx) => {
-    const root = path.join(__dirname, "..", "..");
+    const root = path.join(__dirname, "..", "..", "commands");
     const tree = {};
+    let totalCommands = 0;
 
-    const scan = (dir) => {
+    const scan = (dir, parentCategory = "") => {
       const entries = fs.existsSync(dir)
         ? fs.readdirSync(dir, { withFileTypes: true })
         : [];
-      for (const e of entries) {
-        const full = path.join(dir, e.name);
-        if (e.isDirectory()) scan(full);
-        else if (e.isFile() && e.name.endsWith(".js")) {
+
+      for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
+
+        if (entry.isDirectory()) {
+          const newCategory = entry.name.toLowerCase();
+          scan(fullPath, newCategory);
+        } else if (entry.isFile() && entry.name.endsWith(".js")) {
           try {
-            delete require.cache[require.resolve(full)];
-            const mod = require(full);
-            const cat = (mod.category || "misc").toLowerCase();
-            const name = mod.name || path.basename(full, ".js");
-            if (!tree[cat]) tree[cat] = [];
-            tree[cat].push(name);
-          } catch {}
+            delete require.cache[require.resolve(fullPath)];
+            const mod = require(fullPath);
+            const name = mod.name || path.basename(fullPath, ".js");
+            const category =
+              parentCategory || (mod.category || "misc").toLowerCase();
+
+            if (!tree[category]) tree[category] = [];
+            tree[category].push(name);
+            totalCommands++;
+          } catch (err) {
+            console.error(`Failed to load ${fullPath}:`, err);
+          }
         }
       }
     };
 
-    scan(path.join(root, "commands"));
+    scan(root);
 
     const now = new Date();
     const date = now.toLocaleDateString("en-ZA", {
@@ -49,22 +59,22 @@ module.exports = {
 
     const lines = [
       "‎".repeat(500),
-      " PRIMEAL-APE COMMANDS",
-      "╭─⧉ SYSTEM INFO",
-      `│   Date: ${date}`,
-      `│   Time: ${time}`,
-      `│   RAM: ${usedRamGiB}GiB / ${totalRamGiB}GiB`,
-      `│   Version: ${version}`,
-      "│",
-      "╰─⧉ COMMANDS ↓↓↓",
+      "PRIMEAL-APE COMMAND MENU",
+      "╭─ SYSTEM STATUS",
+      `│  Date: ${date}`,
+      `│  Time: ${time}`,
+      `│  RAM: ${usedRamGiB}GiB / ${totalRamGiB}GiB`,
+      `│  Version: ${version}`,
+      `│  Total Commands: ${totalCommands}`,
+      "╰───────────────────────",
     ];
 
-    for (const cat of Object.keys(tree).sort()) {
-      lines.push(`╭─ ${cat.toUpperCase()}`);
-      for (const cmd of tree[cat].sort()) {
-        lines.push(`│  └ ${cmd}`);
+    for (const category of Object.keys(tree).sort()) {
+      lines.push(`\n╭─ ${category.toUpperCase()}`);
+      for (const cmd of tree[category].sort()) {
+        lines.push(`│  • ${cmd}`);
       }
-      lines.push("╰──────────────");
+      lines.push("╰───────────────────────");
     }
 
     await ctx.reply(lines.join("\n"));

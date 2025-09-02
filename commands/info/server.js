@@ -29,14 +29,17 @@ module.exports = {
       User: os.userInfo().username,
       "Home Directory": os.homedir(),
       "Temp Directory": os.tmpdir(),
+
       "CPU Model": cpuModel,
       "CPU Speed": cpuSpeed,
       "CPU Cores": cpuCores,
-      "Load Average (1m,5m,15m)": load.join(", "),
+      "Load Average (1m, 5m, 15m)": load.join(", "),
       "Bot CPU Time": `${cpuUsageMs} ms`,
+
       "Total Memory": `${toGB(totalMem)} GB`,
       "Free Memory": `${toGB(freeMem)} GB`,
       "Used Memory": `${toGB(totalMem - freeMem)} GB`,
+
       "Node.js Version": process.version,
       "V8 Version": process.versions.v8,
       "LibUV Version": process.versions.uv,
@@ -45,9 +48,9 @@ module.exports = {
       "OS Release": os.release(),
     };
 
-    let output = `> **System Information**\n> =====================\n`;
+    let output = `**System Information**\n\n`;
     for (const [key, value] of Object.entries(info)) {
-      output += `> ${key}: ${value}\n`;
+      output += `• **${key}**: ${value}\n`;
     }
 
     await ctx.reply(output.trim());

@@ -1,7 +1,7 @@
 {
   "name": "primal-ape",
   "version": "1.0.0",
-  "description": "A modular and elegant WhatsApp bot.",
+  "description": "A clean and flexible WhatsApp bot that’s easy to set up and extend.",
   "main": "prime.js",
   "type": "commonjs",
   "scripts": {

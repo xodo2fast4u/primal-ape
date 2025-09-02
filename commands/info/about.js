@@ -12,7 +12,7 @@ module.exports = {
       const info = {
         botName: "Primal Ape",
         version: pkg.version,
-        description: pkg.description || "A modular and elegant WhatsApp bot.",
+        description: pkg.description,
         author: pkg.author || "Unknown",
         openSource: true,
         node: process.version,
