@@ -3,12 +3,9 @@
 **Description:**  
 A modular WhatsApp bot built with Baileys. Supports hot-reloadable commands, custom prefixes, and automatic reconnection for stable long-term use.
 
----
-
 ## Overview
 This is a WhatsApp bot built using the Baileys library. It allows you to run custom commands, reload them without restarting, and keep the connection stable with automatic reconnection.
 
----
 
 ## Features
 - Hot-reloading of commands (no restart required)  
@@ -16,8 +13,6 @@ This is a WhatsApp bot built using the Baileys library. It allows you to run cus
 - Handles text, captions, and interactive messages  
 - Auto-reconnect when disconnected  
 - Simple command structure for easy extensions  
-
----
 
 ## Setup
 
