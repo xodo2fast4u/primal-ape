@@ -1,7 +1,10 @@
-# primeal-ape Bot
+# Primeal-Ape Bot
 
-**Description:**  
-A modular WhatsApp bot built with Baileys. Supports hot-reloadable commands, custom prefixes, and automatic reconnection for stable long-term use.
+![GitHub watchers](https://img.shields.io/github/watchers/ryanfront/primal-ape?style=social)
+![GitHub repo size](https://img.shields.io/github/repo-size/ryanfront/primal-ape)
+[![npm version](https://badge.fury.io/js/package-name.svg)](https://badge.fury.io/js/package-name)
+![GitHub stars](https://img.shields.io/github/stars/ryanfront/primal-ape?style=social)
+[![Baileys-Mod version](https://img.shields.io/npm/v/baileys-mod?style=flat)](https://www.npmjs.com/package/baileys-mod)
 
 ## Overview
 This is a WhatsApp bot built using the Baileys library. It allows you to run custom commands, reload them without restarting, and keep the connection stable with automatic reconnection.
