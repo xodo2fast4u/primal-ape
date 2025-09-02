@@ -2,7 +2,6 @@
 
 ![GitHub watchers](https://img.shields.io/github/watchers/ryanfront/primal-ape?style=social)
 ![GitHub repo size](https://img.shields.io/github/repo-size/ryanfront/primal-ape)
-[![npm version](https://badge.fury.io/js/package-name.svg)](https://badge.fury.io/js/package-name)
 ![GitHub stars](https://img.shields.io/github/stars/ryanfront/primal-ape?style=social)
 [![Baileys-Mod version](https://img.shields.io/npm/v/baileys-mod?style=flat)](https://www.npmjs.com/package/baileys-mod)
 
