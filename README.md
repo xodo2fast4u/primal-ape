@@ -29,7 +29,7 @@ This is a WhatsApp bot built using the Baileys library. It allows you to run cus
 3. Run the bot:
 ` node prime.js `
 
-##Usage
+## Usage
 
 - On first run, enter your WhatsApp number.
 - A pairing code will be displayed. Enter this in WhatsApp to connect.
