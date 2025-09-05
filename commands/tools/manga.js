@@ -9,17 +9,22 @@ module.exports = {
     }
 
     const res = await fetch(
-      `https://api.jikan.moe/v4/manga?q=${encodeURIComponent(
-        q
-      )}&order_by=popularity&sort=desc&limit=1`
+      `https://api.jikan.moe/v4/manga?q=${encodeURIComponent(q)}&limit=5`
     ).catch(() => null);
     const data = await (res ? res.json().catch(() => null) : null);
-    const item = data?.data?.[0];
 
-    if (!item) {
+    if (!data?.data?.length) {
       await ctx.reply("> No manga found.");
       return;
     }
+
+    // Try exact match (case-insensitive) first
+    let item =
+      data.data.find(
+        (m) =>
+          m.title?.toLowerCase() === q.toLowerCase() ||
+          m.title_english?.toLowerCase() === q.toLowerCase()
+      ) || data.data[0]; // fallback to first
 
     const imgUrl =
       item.images?.jpg?.large_image_url ||
