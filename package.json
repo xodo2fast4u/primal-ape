@@ -1,6 +1,6 @@
 {
   "name": "primal-ape",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "A clean and flexible WhatsApp bot that’s easy to set up and extend.",
   "main": "prime.js",
   "type": "commonjs",
@@ -8,6 +8,7 @@
     "start": "node prime.js"
   },
   "keywords": [
+    "xodobyte",
     "whatsapp",
     "bot",
     "baileys"
@@ -16,7 +17,8 @@
   "license": "MIT",
   "dependencies": {
     "@hapi/boom": "^10.0.1",
-    "baileys": "github:nstar-y/bail",
+    "baileys": "https://github.com/nstar-y/bail/",
+    "better-sqlite3": "^12.2.0",
     "chokidar": "^4.0.3",
     "jimp": "^0.16.13",
     "pino": "^9.0.0"
