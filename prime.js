@@ -1,12 +1,8 @@
-// prime.js
 const fs = require("fs");
 const path = require("path");
 const { fork } = require("child_process");
 const chokidar = require("chokidar");
 const P = require("pino");
-
-console.log = () => {};
-console.error = () => {};
 
 if (process.env.PRIMAL_APE_MASTER !== "1") {
   let child = null;
@@ -33,13 +29,15 @@ if (process.env.PRIMAL_APE_MASTER !== "1") {
 }
 
 const {
-  default: makeWASocket,
-  useMultiFileAuthState,
+  makeWASocket,
   DisconnectReason,
   fetchLatestBaileysVersion,
   Browsers,
   makeCacheableSignalKeyStore,
 } = require("baileys");
+const {
+  useSqliteAuthStateEnterprise,
+} = require("./use-sqlite-file-auth-state");
 const readline = require("readline");
 
 const ROOT = process.cwd();
@@ -67,7 +65,40 @@ let sock = null;
 let restarting = false;
 let commandMap = new Map();
 let watcher = null;
-let socketReady = false; // ✅ track connection state
+let socketReady = false;
+
+const STORE_PATH = path.join(ROOT, "store.json");
+let messageStore = {};
+
+if (fs.existsSync(STORE_PATH)) {
+  try {
+    messageStore = JSON.parse(fs.readFileSync(STORE_PATH, "utf8"));
+  } catch {
+    messageStore = {};
+  }
+}
+
+const saveStore = () => {
+  try {
+    fs.writeFileSync(STORE_PATH, JSON.stringify(messageStore, null, 2));
+  } catch (e) {
+    console.error("❌ Failed to save store:", e.message);
+  }
+};
+
+const cacheMessage = (msg) => {
+  if (!msg?.key?.id || !msg?.key?.remoteJid) return;
+  const jid = msg.key.remoteJid;
+  if (!messageStore[jid]) messageStore[jid] = {};
+  messageStore[jid][msg.key.id] = msg;
+  saveStore();
+};
+
+const getMessage = (jid, id) => {
+  return messageStore[jid]?.[id] || null;
+};
+
+global.__messageStore = { cacheMessage, getMessage };
 
 const loadCommands = () => {
   const files = [];
@@ -112,7 +143,6 @@ const parseText = (msg) => {
   return "";
 };
 
-// ✅ now checks socketReady flag instead of sock.ws.readyState
 const reply = async (jid, text, quoted) => {
   if (!socketReady) {
     console.warn("⚠️ Socket not ready, dropping reply");
@@ -130,56 +160,109 @@ const handleMessage = async (msg) => {
     const jid = msg.key.remoteJid;
     if (!jid) return;
     if (msg.key.fromMe) return;
+
     const body = parseText(msg).trim();
     if (!body.startsWith("!")) return;
+
     const [cmdNameRaw, ...rest] = body.slice(1).split(/\s+/);
     const cmdName = (cmdNameRaw || "").toLowerCase();
     const cmd = commandMap.get(cmdName);
     if (!cmd) return;
+
+    const { getMode } = require("./lib/mode");
+    const mode = getMode();
+
+    const isGroup = jid.endsWith("@g.us");
+    const sender = msg.key.participant || msg.key.remoteJid;
+    const botId = sock.user?.id;
+
+    if (mode === "private" && isGroup) return;
+    if (mode === "self" && sender !== botId) return;
+
+    if (isGroup && (mode === "admin" || mode === "nonadmin")) {
+      const metadata = await sock.groupMetadata(jid);
+      const role = metadata.participants.find((p) => p.id === sender)?.admin;
+      const isAdmin = role === "admin" || role === "superadmin";
+
+      if (mode === "admin" && !isAdmin) return;
+      if (mode === "nonadmin" && isAdmin) return;
+    }
+
+    try {
+      const eco = require("./lib/economy");
+      const res = eco.addXpForCommand(jid);
+      if (res.leveledUp) {
+        reply(
+          jid,
+          `level up! now L${res.level} • ${res.title}\nbonus: ${
+            eco.CURRENCY_EMOJI
+          } ${res.rewards.reduce((a, r) => a + (r.bits || 0), 0)} ${
+            eco.CURRENCY_NAME
+          }`,
+          msg
+        );
+      }
+    } catch {}
+
+    const mentionedJid =
+      msg.message?.extendedTextMessage?.contextInfo?.mentionedJid || [];
+
+    const quoted = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage
+      ? {
+          sender: msg.message.extendedTextMessage.contextInfo.participant,
+          message: msg.message.extendedTextMessage.contextInfo.quotedMessage,
+        }
+      : null;
+
     const ctx = {
       sock,
       msg,
       jid,
+      sender,
+      isGroup,
+      mentionedJid,
+      quoted,
       args: rest,
       text: rest.join(" "),
       reply: (t) => reply(jid, t, msg),
       send: async (content, options = {}) => {
         if (!socketReady) {
-          console.warn("⚠️ Socket not ready, dropping send");
+          console.warn("⚠️ socket not ready, dropping send");
           return;
         }
         try {
           await sock.sendMessage(jid, content, { quoted: msg, ...options });
         } catch (e) {
-          console.error("❌ Failed to send message:", e.message);
+          console.error("❌ failed to send message:", e.message);
         }
       },
     };
 
     await cmd.run(ctx);
-  } catch {}
+  } catch (e) {
+    console.error("❌ handleMessage crashed:", e.message);
+  }
 };
+
+const logger = P({ level: "silent" });
 
 const startSocket = async () => {
   if (restarting) return;
   restarting = true;
   try {
-    const { state, saveCreds } = await useMultiFileAuthState(
-      path.join(ROOT, "auth")
+    const { state, saveCreds } = await useSqliteAuthStateEnterprise(
+      path.join(ROOT, "auth.db")
     );
     const { version } = await fetchLatestBaileysVersion();
     sock = makeWASocket({
       version,
       printQRInTerminal: false,
-      auth: {
-        creds: state.creds,
-        keys: makeCacheableSignalKeyStore(state.keys, console),
-      },
+      auth: state,
       browser: Browsers.macOS("Safari"),
       markOnlineOnConnect: true,
       connectTimeoutMs: 45_000,
       syncFullHistory: false,
-      logger: P({ level: "silent" }),
+      logger,
     });
 
     if (!state.creds.registered) {
@@ -198,8 +281,24 @@ const startSocket = async () => {
     sock.ev.on("creds.update", saveCreds);
 
     sock.ev.on("messages.upsert", async ({ messages }) => {
-      for (const m of messages) handleMessage(m);
+      for (const m of messages) {
+        cacheMessage(m);
+        handleMessage(m);
+      }
     });
+
+    // 🔹 Deleted message recovery hook
+    // sock.ev.on("messages.update", async (updates) => {
+    //   const recoverCmd = commandMap.get("recover");
+    //   if (!recoverCmd) return;
+    //   for (const update of updates) {
+    //     await recoverCmd.run({
+    //       sock,
+    //       update,
+    //       reply: (t, quoted) => reply(update.key?.remoteJid, t, quoted),
+    //     });
+    //   }
+    // });
 
     sock.ev.on("connection.update", (u) => {
       const { connection, lastDisconnect } = u;
