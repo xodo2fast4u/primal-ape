@@ -53,30 +53,35 @@ module.exports = {
       minute: "2-digit",
     });
 
-    const totalRamGiB = (os.totalmem() / 1024 ** 3).toFixed(1);
-    const usedRamGiB = ((os.totalmem() - os.freemem()) / 1024 ** 3).toFixed(1);
-    const version = "1.0.0";
+    const totalRamGB = (os.totalmem() / 1e9).toFixed(2);
+    const usedRamGB = ((os.totalmem() - os.freemem()) / 1e9).toFixed(2);
 
-    const lines = [
-      "‎".repeat(500),
-      "PRIMEAL-APE COMMAND MENU",
-      "╭─ SYSTEM STATUS",
-      `│  Date: ${date}`,
-      `│  Time: ${time}`,
-      `│  RAM: ${usedRamGiB}GiB / ${totalRamGiB}GiB`,
-      `│  Version: ${version}`,
-      `│  Total Commands: ${totalCommands}`,
-      "╰───────────────────────",
+    const senderName = ctx.msg.pushName || "User";
+    const greeting = `Greetings Fellow Homosapian @${senderName}`;
+
+    const readMore = String.fromCharCode(8204).repeat(4000);
+
+    const menuBody = [
+      "+----------------------------+",
+      "|      Primal Ape Menu      |",
+      "+----------------------------+",
+      `Date:    ${date}`,
+      `Time:    ${time}`,
+      `RAM:     ${usedRamGB} GB / ${totalRamGB} GB`,
+      `Total Commands: ${totalCommands}`,
+      "------------------------------",
     ];
 
     for (const category of Object.keys(tree).sort()) {
-      lines.push(`\n╭─ ${category.toUpperCase()}`);
+      menuBody.push(`\n[${category.toUpperCase()}]`);
       for (const cmd of tree[category].sort()) {
-        lines.push(`│  • ${cmd}`);
+        menuBody.push(`  - ${cmd}`);
       }
-      lines.push("╰───────────────────────");
+      menuBody.push("------------------------------");
     }
 
-    await ctx.reply(lines.join("\n"));
+    const finalMenu = `${greeting}\n${readMore}\n${menuBody.join("\n")}`;
+
+    await ctx.reply(finalMenu);
   },
 };
