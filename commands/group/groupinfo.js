@@ -4,7 +4,7 @@ module.exports = {
   run: async (ctx) => {
     if (!ctx.isGroup) return ctx.reply("❌ Group only command.");
 
-    const metadata = await ctx.getGroupMetadata(ctx.chatId);
+    const metadata = await ctx.sock.groupMetadata(ctx.jid);
     const info = [
       `📌 *Group Info*`,
       `• ID: ${metadata.id}`,

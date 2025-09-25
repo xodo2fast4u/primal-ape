@@ -9,12 +9,12 @@ module.exports = {
         return await ctx.reply("❌ This command only works in groups.");
       }
 
-      const metadata = await ctx.getGroupMetadata(ctx.chatId);
+      const metadata = await ctx.sock.groupMetadata(ctx.jid);
       const participants = metadata.participants || [];
 
       const mentions = participants.map((p) => p.id);
 
-      await ctx.sendMessage(ctx.chatId, {
+      await ctx.send({
         text: text + "\u200E",
         mentions,
       });

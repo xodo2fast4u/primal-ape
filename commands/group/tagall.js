@@ -6,7 +6,7 @@ module.exports = {
       return await ctx.reply("❌ This command only works in groups.");
     }
 
-    const metadata = await ctx.getGroupMetadata(ctx.chatId);
+    const metadata = await ctx.sock.groupMetadata(ctx.jid);
     const participants = metadata.participants || [];
 
     const mentions = participants.map((p) => p.id);
@@ -14,7 +14,7 @@ module.exports = {
       .map((p, i) => `${i + 1}. @${p.id.split("@")[0]}`)
       .join("\n");
 
-    await ctx.sendMessage(ctx.chatId, {
+    await ctx.send({
       text: `📢 *TAG ALL*\n\n${list}`,
       mentions,
     });
