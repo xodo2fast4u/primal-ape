@@ -1,6 +1,6 @@
 <div align="center">
 
-# Primeal-Ape Bot
+# Primal-Ape Bot
 
 ![primal ape](./primal.jpeg)
 
