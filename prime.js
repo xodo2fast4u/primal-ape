@@ -66,6 +66,8 @@ let restarting = false;
 let commandMap = new Map();
 let watcher = null;
 let socketReady = false;
+// Track IDs of messages the bot itself sent so we don't process them as incoming commands
+const ownSentMessageIds = new Set();
 
 const STORE_PATH = path.join(ROOT, "store.json");
 let messageStore = {};
@@ -145,11 +147,16 @@ const parseText = (msg) => {
 
 const reply = async (jid, text, quoted) => {
   if (!socketReady) {
-    console.warn("⚠️ Socket not ready, dropping reply");
+    console.warn("⚠️ SOCKET NOT READY, DROPPING REPLY");
     return;
   }
   try {
-    await sock.sendMessage(jid, { text }, { quoted });
+    const res = await sock.sendMessage(jid, { text }, { quoted });
+    // Baileys may return message IDs in different shapes; capture common ones
+    if (res && typeof res === "object") {
+      const id = res.key?.id || res.id || (res?.message?.id && res.message.id);
+      if (id) ownSentMessageIds.add(id);
+    }
   } catch (e) {
     console.error("❌ Failed to send reply:", e.message);
   }
@@ -159,12 +166,12 @@ const handleMessage = async (msg) => {
   try {
     const jid = msg.key.remoteJid;
     if (!jid) return;
-    if (msg.key.fromMe) return;
 
     const body = parseText(msg).trim();
-    if (!body.startsWith("!")) return;
+    if (!body) return;
+    if (body.startsWith("!")) return; // Ignore any message with a prefix
 
-    const [cmdNameRaw, ...rest] = body.slice(1).split(/\s+/);
+    const [cmdNameRaw, ...rest] = body.split(/\s+/);
     const cmdName = (cmdNameRaw || "").toLowerCase();
     const cmd = commandMap.get(cmdName);
     if (!cmd) return;
@@ -227,14 +234,28 @@ const handleMessage = async (msg) => {
       reply: (t) => reply(jid, t, msg),
       send: async (content, options = {}) => {
         if (!socketReady) {
-          console.warn("⚠️ socket not ready, dropping send");
+          console.warn("⚠️ SOCKET NOT READY, DROPPING MESSAGE");
           return;
         }
         try {
-          await sock.sendMessage(jid, content, { quoted: msg, ...options });
+          const res = await sock.sendMessage(jid, content, {
+            quoted: msg,
+            ...options,
+          });
+          if (res && typeof res === "object") {
+            const id =
+              res.key?.id || res.id || (res?.message?.id && res.message.id);
+            if (id) ownSentMessageIds.add(id);
+          }
         } catch (e) {
-          console.error("❌ failed to send message:", e.message);
+          console.error("❌ FAILED TO SEND MESSAGE:", e.message);
         }
+      },
+      sendMessage: async (jidOrContent, contentOrOptions, options) => {
+        if (typeof jidOrContent === "string") {
+          return sock.sendMessage(jidOrContent, contentOrOptions, options);
+        }
+        return ctx.send(jidOrContent, contentOrOptions);
       },
     };
 
@@ -269,13 +290,9 @@ const startSocket = async () => {
       const pn = await rlQuestion(
         "Enter your phone number with country code: "
       );
-      const custom = await rlQuestion(
-        "Optional custom 8-char pairing code (press Enter to skip): "
-      );
-      await sock.requestPairingCode(
-        pn,
-        custom && custom.length > 0 ? custom : undefined
-      );
+      const customPairingCode = "PRIMEAPE";
+      await sock.requestPairingCode(pn, customPairingCode);
+      console.log(`Pairing code used: ${customPairingCode}`);
     }
 
     sock.ev.on("creds.update", saveCreds);
@@ -283,11 +300,18 @@ const startSocket = async () => {
     sock.ev.on("messages.upsert", async ({ messages }) => {
       for (const m of messages) {
         cacheMessage(m);
+        // If this message ID matches one we recently sent, skip handling to avoid loops
+        const mid = m?.key?.id;
+        if (mid && ownSentMessageIds.has(mid)) {
+          // we've observed our own outgoing message; drop it from tracking and skip
+          ownSentMessageIds.delete(mid);
+          continue;
+        }
         handleMessage(m);
       }
     });
 
-    // 🔹 Deleted message recovery hook
+    // Deleted message recovery hook
     // sock.ev.on("messages.update", async (updates) => {
     //   const recoverCmd = commandMap.get("recover");
     //   if (!recoverCmd) return;
@@ -304,7 +328,7 @@ const startSocket = async () => {
       const { connection, lastDisconnect } = u;
       if (connection === "open") {
         socketReady = true;
-        console.log("✅ WhatsApp connected");
+        console.log("PRIMAL APE IS ONLINE!");
       } else if (connection === "close") {
         socketReady = false;
         const statusCode = lastDisconnect?.error?.output?.statusCode || 0;
