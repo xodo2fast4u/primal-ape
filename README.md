@@ -18,7 +18,7 @@ This is a WhatsApp bot built using the Baileys library. It allows you to run cus
 ## Features
 
 - Hot-reloading of commands (no restart required)
-- Support for multiple prefixes (`!` and `.` by default)
+- Doesn't require prefix for commands
 - Handles text, captions, and interactive messages
 - Auto-reconnect when disconnected
 - Simple command structure for easy extensions
