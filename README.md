@@ -11,51 +11,76 @@
 
 </div>
 
-## Overview
+Primal Ape is a modular Node.js chat-bot that helps automate routine group tasks, boosts engagement with economy and entertainment features, and makes it easy to extend functionality with focused command modules.
 
-This is a WhatsApp bot built using the Baileys library. It allows you to run custom commands, reload them without restarting, and keep the connection stable with automatic reconnection.
+Why this matters
 
-## Features
+- Saves moderators time by automating repetitive actions (moderation, link revocation, group settings).
+- Keeps communities active with mini-games and economy features that encourage participation.
+- Provides a clear structure that lowers the cost of adding features or fixing bugs.
 
-- Hot-reloading of commands (no restart required)
-- Doesn't require prefix for commands
-- Handles text, captions, and interactive messages
-- Auto-reconnect when disconnected
-- Simple command structure for easy extensions
+## What it does
 
-## Setup
+- Moderation: promote/demote, kick, ban, lock/unlock groups, and manage join requests.
+- Economy & engagement: virtual currency, shop, daily rewards, leaderboards, and simple games.
+- Utilities: stickers, media commands, profile management, search and developer tools.
 
-### Requirements
+## Repo layout
 
-- Node.js 16 or newer
-- A WhatsApp account
+- `prime.js` — main entry point to start the bot.
+- `use-sqlite-file-auth-state.js` — auth state helper (SQLite-backed storage).
+- `commands/` — modular command files grouped by category (admin, chat, economy, group, info, maker, music, tools).
+- `lib/` — shared utilities and helpers.
 
-### Installation
+## Quick start
 
-1. Clone this repository
-2. Install dependencies:
-   ```
-   npm install
-   ```
-3. Run the bot:
-   ```
-   node prime.js
-   ```
+1. Install dependencies
 
-## Usage
+```cmd
+npm install
+```
 
-- On first run, enter your WhatsApp number.
-- A pairing code will be displayed. Enter this in WhatsApp to connect.
-- Place command files inside the `commands/` folder.
+2. Start the bot
 
-## Notes
+```cmd
+node prime.js
+```
 
-- Commands reload automatically.
-- Uncaught errors are handled silently for stability.
+If `prime.js` accepts flags or a config path, run `node prime.js --help` or open the file to confirm.
 
-## Contributing
+## Commands
 
-Contributions are welcome! Feel free to open issues and submit pull requests.
+Commands live inside `commands/` and follow a consistent handler pattern. Examples:
+
+- `admin/` — moderation helpers
+- `chat/` — profile and chat utilities
+- `economy/` — balance, shop, daily, work, leaderboard
+- `group/` — invite/link management and group info
+- `maker/` — sticker and media generation
+- `music/` — play, search, lyrics
+- `tools/` — converters, HTTP tools, QR, TTS, and more
+
+Open any command file to see the exact input/output contract for that handler.
+
+## Contribution & expectations
+
+When you contribute, explain the problem you solved and the value your change delivers.
+
+Minimal checklist for contributions:
+
+1. Open an issue for larger features or bugs (smaller fixes may go straight to a branch).
+2. Create a branch: `git checkout -b feat/short-description`.
+3. Implement your change and include tests if applicable.
+4. Run project locally and verify the behavior.
+5. Open a PR with a clear title and the checklist above.
+
+See `CONTRIBUTING.md` for more detail on coding style, PR format, and how to describe impact in PRs.
+
+## Troubleshooting
+
+- If the bot doesn't start: check `prime.js` for missing environment variables or thrown errors logged to console.
+- If commands behave unexpectedly: open the specific command file and check assumptions about `data/` files or permissions.
+- Verify Node.js version if native modules or specific language features are used.
 
 ## License
 
