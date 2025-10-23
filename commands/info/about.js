@@ -10,35 +10,31 @@ module.exports = {
       const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
 
       const info = {
-        botName: "Primal Ape",
-        version: pkg.version,
-        description: pkg.description,
-        author: pkg.author || "Unknown",
-        openSource: true,
-        node: process.version,
-        platform: process.platform,
-        dependencies: pkg.dependencies || {},
+        "Bot Name": "Primal Ape",
+        Version: pkg.version,
+        Description: pkg.description,
+        Author: pkg.author || "Unknown",
+        "Open Source": pkg.openSource !== false ? "Yes" : "No",
+        "Node.js": process.version,
+        Platform: process.platform,
       };
 
-      let output =
-        `> Bot Info\n` +
-        `> ==========\n` +
-        `> name: ${info.botName}\n` +
-        `> version: ${info.version}\n` +
-        `> description: ${info.description}\n` +
-        `> author: ${info.author}\n` +
-        `> open source: ${info.openSource ? "yes" : "no"}\n` +
-        `> node: ${info.node}\n` +
-        `> platform: ${info.platform}\n` +
-        `> dependencies:\n`;
+      let output = `> Primal Ape Information\n` + `> =================\n`;
 
-      for (const [lib, ver] of Object.entries(info.dependencies)) {
+      for (const [key, value] of Object.entries(info)) {
+        output += `> ${key}: ${value}\n`;
+      }
+
+      output += `> Dependencies:\n`;
+      for (const [lib, ver] of Object.entries(pkg.dependencies || {})) {
         output += `>   ${lib}: ${ver}\n`;
       }
 
       await ctx.reply(output.trim());
     } catch (err) {
-      await ctx.reply("> Failed to read package.json.");
+      await ctx.reply(
+        "> Failed to read package.json. Check file path and permissions."
+      );
     }
   },
 };

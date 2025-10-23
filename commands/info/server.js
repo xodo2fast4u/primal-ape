@@ -42,15 +42,14 @@ module.exports = {
 
       "Node.js Version": process.version,
       "V8 Version": process.versions.v8,
-      "LibUV Version": process.versions.uv,
       "OpenSSL Version": process.versions.openssl,
-      "Zlib Version": process.versions.zlib,
       "OS Release": os.release(),
     };
 
-    let output = `**System Information**\n\n`;
+    let output = `> System Information\n` + `> ==================\n`;
+
     for (const [key, value] of Object.entries(info)) {
-      output += `• **${key}**: ${value}\n`;
+      output += `> ${key}: ${value}\n`;
     }
 
     await ctx.reply(output.trim());

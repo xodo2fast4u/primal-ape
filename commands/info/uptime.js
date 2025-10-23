@@ -8,17 +8,17 @@ module.exports = {
       const h = Math.floor(sec / 3600);
       const m = Math.floor((sec % 3600) / 60);
       const s = sec % 60;
-      return `${h}h ${m}m ${s}s`;
+      return `${h}♄ ${m}ᗰ ${s}∫`;
     };
 
     const botUptime = formatTime(Math.floor(process.uptime()));
     const osUptime = formatTime(Math.floor(os.uptime()));
 
     const output =
-      `> Uptime Information\n` +
+      `> uptime information\n` +
       `> =================\n` +
-      `> Bot Uptime: ${botUptime}\n` +
-      `> System Uptime: ${osUptime}`;
+      `> primal ape uptime: ${botUptime}\n` +
+      `> primal ape system uptime: ${osUptime}`;
 
     await ctx.reply(output);
   },

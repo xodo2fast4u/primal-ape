@@ -61,26 +61,34 @@ module.exports = {
 
     const readMore = String.fromCharCode(8204).repeat(4000);
 
-    const menuBody = [
-      "+----------------------------+",
-      "|      Primal Ape Menu      |",
-      "+----------------------------+",
-      `Date:    ${date}`,
-      `Time:    ${time}`,
-      `RAM:     ${usedRamGB} GB / ${totalRamGB} GB`,
-      `Total Commands: ${totalCommands}`,
-      "------------------------------",
-    ];
+    const header = [];
+    header.push("╔════════════════════════════════════╗");
+    header.push("║          🌴 Primal Ape Menu         ║");
+    header.push("╚════════════════════════════════════╝");
 
-    for (const category of Object.keys(tree).sort()) {
-      menuBody.push(`\n[${category.toUpperCase()}]`);
-      for (const cmd of tree[category].sort()) {
-        menuBody.push(`  - ${cmd}`);
+    const infoLines = [];
+    infoLines.push(`Date: ${date}`);
+    infoLines.push(`Time: ${time}`);
+    infoLines.push(`RAM: ${usedRamGB} GB / ${totalRamGB} GB`);
+    infoLines.push(`Total Commands: ${totalCommands}`);
+
+    const sections = [];
+    const categories = Object.keys(tree).sort();
+    for (const category of categories) {
+      const cmds = tree[category].sort();
+      sections.push(`\n🏷️  ${category.toUpperCase()}  —  (${cmds.length})`);
+      for (const cmd of cmds) {
+        sections.push(`  • ${cmd}`);
       }
-      menuBody.push("------------------------------");
     }
 
-    const finalMenu = `${greeting}\n${readMore}\n${menuBody.join("\n")}`;
+    const menuParts = [];
+    menuParts.push(...header);
+    menuParts.push(...infoLines.map((l) => `  ${l}`));
+    menuParts.push("────────────────────────────────────");
+    menuParts.push(...sections);
+
+    const finalMenu = `${greeting}\n${readMore}\n${menuParts.join("\n")}`;
 
     await ctx.reply(finalMenu);
   },
