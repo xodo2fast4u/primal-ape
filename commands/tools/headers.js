@@ -1,5 +1,6 @@
 module.exports = {
   name: "headers",
+  category: "tools",
   run: async (ctx) => {
     if (!ctx.text) return ctx.reply("> usage: !headers <url>");
     try {

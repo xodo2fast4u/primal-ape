@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const path = require("path");
 
 function xor(buf, k) {
   let o = Buffer.alloc(buf.length);
@@ -15,14 +16,39 @@ function obf(src) {
 module.exports = {
   name: "obfuscate",
   run: async (ctx) => {
-    if (!ctx.text) return ctx.reply("> usage: !obfuscate <text>");
-    const out = obf(ctx.text);
-    if (out.length > 3000)
+    let source;
+
+    if (ctx.text) {
+      source = ctx.text;
+    }
+    else if (ctx.message?.documentMessage) {
+      const fileName = ctx.message.documentMessage.fileName || "input.js";
+      if (!fileName.endsWith(".js")) {
+        return ctx.reply("> Please upload a `.js` file.");
+      }
+
+      try {
+        const buffer = await ctx.downloadMediaMessage(ctx);
+        source = buffer.toString("utf8");
+      } catch (e) {
+        console.error("File download error:", e);
+        return ctx.reply("> Failed to read the file.");
+      }
+    }
+
+    if (!source)
+      return ctx.reply("> usage: !obfuscate <text> or upload a .js file");
+
+    const out = obf(source);
+
+    if (out.length > 3000) {
       await ctx.send({
         document: Buffer.from(out),
         fileName: "obfuscated.js",
         mimetype: "application/javascript",
       });
-    else await ctx.reply("```js\n" + out + "\n```");
+    } else {
+      await ctx.reply("```js\n" + out + "\n```");
+    }
   },
 };

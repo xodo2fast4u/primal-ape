@@ -1,5 +1,6 @@
 module.exports = {
   name: "jwt",
+  category: "tools",
   run: async (ctx) => {
     if (!ctx.text) return ctx.reply("> usage: !jwt <token>");
     try {

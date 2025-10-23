@@ -1,5 +1,6 @@
 module.exports = {
   name: "deobfuscate",
+  category: "tools",
   run: async (ctx) => {
     if (!ctx.text) return ctx.reply("> usage: !deobfuscate <obfuscated-code>");
     const m = ctx.text.match(/const k=(\d+);const d="([^"]+)"/);

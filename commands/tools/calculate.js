@@ -67,6 +67,7 @@ function evaluate(expr) {
 
 module.exports = {
   name: "calculate",
+  category: "tools",
   run: async (ctx) => {
     if (!ctx.text) return ctx.reply("> usage: !calculate <expression>");
     try {

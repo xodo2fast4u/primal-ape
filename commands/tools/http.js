@@ -1,5 +1,6 @@
 module.exports = {
   name: "http",
+  category: "tools",
   run: async (ctx) => {
     if (!ctx.text) return ctx.reply("> usage: !http <url>");
     try {

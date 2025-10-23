@@ -1,5 +1,6 @@
 module.exports = {
   name: "decode",
+  category: "tools",
   run: async (ctx) => {
     if (!ctx.text) return ctx.reply("> usage: !decode <base64>");
     try {

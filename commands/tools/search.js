@@ -1,6 +1,6 @@
 module.exports = {
   name: "search",
-  category: "info",
+  category: "tools",
   run: async (ctx) => {
     const q = (ctx.text || "").trim();
     if (!q) {

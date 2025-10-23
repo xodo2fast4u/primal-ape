@@ -20,13 +20,12 @@ module.exports = {
       return;
     }
 
-    // Try to find exact match first (case-insensitive)
     let item =
       data.data.find(
         (m) =>
           m.title?.toLowerCase() === q.toLowerCase() ||
           m.title_english?.toLowerCase() === q.toLowerCase()
-      ) || data.data[0]; // fallback to first result
+      ) || data.data[0];
 
     const imgUrl =
       item.images?.jpg?.large_image_url ||

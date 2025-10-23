@@ -11,6 +11,7 @@ function gen(len = 30) {
 
 module.exports = {
   name: "password",
+  category: "tools",
   run: async (ctx) => {
     const len = parseInt(ctx.args[0]) || 30;
     await ctx.reply(gen(len));
