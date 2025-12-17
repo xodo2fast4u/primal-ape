@@ -5,13 +5,13 @@
 ![primal ape](./primal.jpeg)
 
 <p align="center">
-  <a href="https://github.com/ryanfront/primal-ape/watchers">
+  <a href="https://github.com/xodo2fast4u/primal-ape/watchers">
     <img src="https://img.shields.io/badge/Watchers-ryanfront%2Fprimal--ape-238636?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Watchers">
   </a>
-  <a href="https://github.com/ryanfront/primal-ape">
+  <a href="https://github.com/xodo2fast4u/primal-ape">
     <img src="https://img.shields.io/github/repo-size/ryanfront/primal-ape?style=for-the-badge&logo=github&logoColor=white&label=Repo%20Size" alt="GitHub Repo Size">
   </a>
-  <a href="https://github.com/ryanfront/primal-ape/stargazers">
+  <a href="https://github.com/xodo2fast4u/primal-ape/stargazers">
     <img src="https://img.shields.io/badge/Stars-ryanfront%2Fprimal--ape-FFD700?style=for-the-badge&logo=github&logoColor=black" alt="GitHub Stars">
   </a>
   <a href="https://www.npmjs.com/package/baileys-mod">
