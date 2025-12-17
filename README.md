@@ -2,7 +2,7 @@
 
 # Primal-Ape Bot
 
-![Primal Ape]([./primal.jpeg](https://files.catbox.moe/n8h8fs.webp))
+![Primal Ape](https://files.catbox.moe/n8h8fs.webp)
 
 <p align="center">
   <a href="https://github.com/xodo2fast4u">
