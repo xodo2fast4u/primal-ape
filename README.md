@@ -4,10 +4,20 @@
 
 ![primal ape](./primal.jpeg)
 
-![GitHub watchers](https://img.shields.io/github/watchers/ryanfront/primal-ape?style=social)
-![GitHub repo size](https://img.shields.io/github/repo-size/ryanfront/primal-ape)
-![GitHub stars](https://img.shields.io/github/stars/ryanfront/primal-ape?style=social)
-[![Baileys-Mod version](https://img.shields.io/npm/v/baileys-mod?style=flat)](https://www.npmjs.com/package/baileys-mod)
+<p align="center">
+  <a href="https://github.com/ryanfront/primal-ape/watchers">
+    <img src="https://img.shields.io/badge/Watchers-ryanfront%2Fprimal--ape-238636?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Watchers">
+  </a>
+  <a href="https://github.com/ryanfront/primal-ape">
+    <img src="https://img.shields.io/github/repo-size/ryanfront/primal-ape?style=for-the-badge&logo=github&logoColor=white&label=Repo%20Size" alt="GitHub Repo Size">
+  </a>
+  <a href="https://github.com/ryanfront/primal-ape/stargazers">
+    <img src="https://img.shields.io/badge/Stars-ryanfront%2Fprimal--ape-FFD700?style=for-the-badge&logo=github&logoColor=black" alt="GitHub Stars">
+  </a>
+  <a href="https://www.npmjs.com/package/baileys-mod">
+    <img src="https://img.shields.io/npm/v/baileys-mod?style=for-the-badge&logo=npm&logoColor=white&label=Baileys--Mod" alt="Baileys-Mod Version">
+  </a>
+</p>
 
 </div>
 
