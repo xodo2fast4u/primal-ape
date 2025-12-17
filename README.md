@@ -11,9 +11,8 @@
   <a href="https://github.com/xodo2fast4u">
     <img src="https://img.shields.io/github/repo-size/xodo2fast4u/primal-ape?style=for-the-badge&logo=github&logoColor=white&label=Repo%20Size" alt="GitHub Repo Size">
   </a>
-  <a href="https://github.com/xodo2fast4u?tab=stars">
-    <img src="https://img.shields.io/badge/Stars-xodo2fast4u-FFD700?style=for-the-badge&logo=github&logoColor=black" alt="GitHub Stars">
-  </a>
+  ![Stars](https://img.shields.io/github/stars/xodo2fast4u/primal-ape?style=social)
+  ![License](https://img.shields.io/github/license/xodo2fast4u/primal-ape)
   <a href="https://www.npmjs.com/package/baileys-mod">
     <img src="https://img.shields.io/npm/v/baileys-mod?style=for-the-badge&logo=npm&logoColor=white&label=Baileys--Mod" alt="Baileys-Mod Version">
   </a>
