@@ -5,9 +5,6 @@
 ![primal ape](./primal.jpeg)
 
 <p align="center">
-  <a href="https://github.com/xodo2fast4u?tab=watchers">
-    <img src="https://img.shields.io/badge/Watchers-xodo2fast4u-238636?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Watchers">
-  </a>
   <a href="https://github.com/xodo2fast4u">
     <img src="https://img.shields.io/github/repo-size/xodo2fast4u/primal-ape?style=for-the-badge&logo=github&logoColor=white&label=Repo%20Size" alt="GitHub Repo Size">
   </a>
