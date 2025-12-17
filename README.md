@@ -5,14 +5,14 @@
 ![primal ape](./primal.jpeg)
 
 <p align="center">
-  <a href="https://github.com/xodo2fast4u/primal-ape/watchers">
-    <img src="https://img.shields.io/badge/Watchers-ryanfront%2Fprimal--ape-238636?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Watchers">
+  <a href="https://github.com/xodo2fast4u?tab=watchers">
+    <img src="https://img.shields.io/badge/Watchers-xodo2fast4u-238636?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Watchers">
   </a>
-  <a href="https://github.com/xodo2fast4u/primal-ape">
-    <img src="https://img.shields.io/github/repo-size/ryanfront/primal-ape?style=for-the-badge&logo=github&logoColor=white&label=Repo%20Size" alt="GitHub Repo Size">
+  <a href="https://github.com/xodo2fast4u">
+    <img src="https://img.shields.io/github/repo-size/xodo2fast4u/primal-ape?style=for-the-badge&logo=github&logoColor=white&label=Repo%20Size" alt="GitHub Repo Size">
   </a>
-  <a href="https://github.com/xodo2fast4u/primal-ape/stargazers">
-    <img src="https://img.shields.io/badge/Stars-ryanfront%2Fprimal--ape-FFD700?style=for-the-badge&logo=github&logoColor=black" alt="GitHub Stars">
+  <a href="https://github.com/xodo2fast4u?tab=stars">
+    <img src="https://img.shields.io/badge/Stars-xodo2fast4u-FFD700?style=for-the-badge&logo=github&logoColor=black" alt="GitHub Stars">
   </a>
   <a href="https://www.npmjs.com/package/baileys-mod">
     <img src="https://img.shields.io/npm/v/baileys-mod?style=for-the-badge&logo=npm&logoColor=white&label=Baileys--Mod" alt="Baileys-Mod Version">
